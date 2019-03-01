@@ -118,6 +118,7 @@ export class AppComponent implements OnInit {
       const pageCounts = Math.ceil(searchResultArray.length / this.eachCounts);
       this.pageCountArray = Array(pageCounts).fill(0);
     }
+    this.currentPage = 0;
   }
   clearSearchResult() {
     this.searchString = '';
@@ -134,7 +135,7 @@ export class AppComponent implements OnInit {
     }
   }
   nextProducts() {
-    if (this.currentPage < this.productsArray.length - 1) {
+    if (this.currentPage < this.pageCountArray.length - 1) {
       this.refreshProductArray(this.currentPage + 1);
     }
   }
