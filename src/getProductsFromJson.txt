@@ -1,0 +1,18 @@
+getProductsFromJson() {
+  const eachCounts = 10;
+  let tmpProducts: Product[] = [];
+  let pageMaxCount = 0;
+  from(fetch('../assets/pros-list.json').then(res => res.json())).subscribe(value => {
+    tmpProducts = value;
+    pageMaxCount = Math.ceil(tmpProducts.length / eachCounts);
+    for (let count = 0; count < pageMaxCount; count++) {
+      const tmpProductItem: Product[] = [];
+      for (let idx = 0; idx < eachCounts; idx++) {
+        const tmpProductsIndex = 10 * count + idx;
+        if (tmpProducts[tmpProductsIndex]) { tmpProductItem.push(tmpProducts[tmpProductsIndex]); }
+      }
+      this.productsArray.push(tmpProductItem);
+      this.products = this.productsArray[0];
+    }
+  });
+}

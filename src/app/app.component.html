@@ -1,20 +1,74 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <h1 class="page-header"><small>一定要來一下的商城</small></h1>
+      <app-productitem
+        [products]="products"
+        (addCart)="addCart($event)"
+      ></app-productitem>
+      <ul class="pagination">
+        <li [class.disabled]="currentPage === 0"><a
+            href="javascript:;"
+            (click)="prevProducts()"
+          >« Prev</a></li>
+        <li
+          [class.active]="idx === currentPage"
+          *ngFor="let item of productsArray; let idx = index"
+        ><a
+            href="javascript:;"
+            (click)="refreshProductArray(idx)"
+          >{{idx + 1}}</a></li>
+        <li [class.disabled]="currentPage === productsArray.length - 1"><a
+            href="javascript:;"
+            (click)="nextProducts()"
+          >Next</a></li>
+      </ul>
+    </div>
+    <div class="col-md-4 ">
+      <div class="well">
+        <h4>商品搜尋</h4>
+        <div class="input-group ">
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="searchString"
+            (keyup.escape)="clearSearchResult()"
+          /><span class="input-group-btn"><button
+              class="btn btn-default"
+              (click)="searchProductName()"
+            >
+              <span class="glyphicon glyphicon-search "></span></button></span>
+        </div>
+      </div>
+      <hr />
+      <div class="well cart">
+        <h4>購物車</h4>
+        <ul
+          class="itemsInCart"
+          *ngFor="let item of cartshopping; let idxCart = index"
+        >
+          <li>
+            <div class="cart-item">
+              <div class="cart-title">{{item.cartTitle}}</div>
+              <span class="price">$ {{item.cartPrice | number }}</span> x
+              <span class="count">{{item.cartCount}}</span>
+              <div class="handler">
+                <a
+                  href="javascript:;"
+                  class="cart-btn plus"
+                  (click)="addCart(item.cartProductIndex)"
+                >+</a><a
+                  href="javascript:;"
+                  class="cart-btn minus"
+                  (click)="removeCart(item.cartProductIndex)"
+                >-</a>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <hr />
+        <p>小計： <span>$ {{cartshoppingTotalPrice | number }}</span></p>
+      </div>
+    </div>
+  </div>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
-

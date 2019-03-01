@@ -1,0 +1,22 @@
+<div
+  class="item"
+  *ngFor="let item of products; let idxProduct = index"
+>
+  <h2>{{ item.index }} - {{ item.name }}</h2>
+  <img
+    [src]="item.picture"
+    [alt]="item.name"
+    class="item-img img-responsive"
+  />
+  <p>
+    {{item.info}}
+  </p>
+  <p class="item-price">$ {{ item.price | number }}</p>
+  <a
+    href="#"
+    class="btn btn-primary"
+    (click)="addProductToCart(item.index
+    )"
+  >放入購物車 <span class="glyphicon glyphicon-chevron-right"></span></a>
+</div>
+<hr />
