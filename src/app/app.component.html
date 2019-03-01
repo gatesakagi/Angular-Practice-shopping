@@ -13,7 +13,7 @@
           >« Prev</a></li>
         <li
           [class.active]="idx === currentPage"
-          *ngFor="let item of productsArray; let idx = index"
+          *ngFor="let item of pageCountArray; let idx = index"
         ><a
             href="javascript:;"
             (click)="refreshProductArray(idx)"

@@ -14,9 +14,11 @@ export class AppComponent implements OnInit {
   cartshoppingTotalPrice: Number = 0;
   maxCartId = 0;
   searchString = '';
-  products: Product[] = [];
+  products: Product[];
   productsArray = [];
+  pageCountArray = [];
   currentPage = 0;
+  eachCounts = 10;
   constructor() {
   }
   ngOnInit() {
@@ -24,21 +26,23 @@ export class AppComponent implements OnInit {
   }
 
   getProductsFromJson() {
-    const eachCounts = 10;
+    this.products = [];
+    this.productsArray = [];
     let tmpProducts: Product[] = [];
     let pageMaxCount = 0;
     from(fetch('../assets/pros-list.json').then(res => res.json())).subscribe(value => {
       tmpProducts = value;
-      pageMaxCount = Math.ceil(tmpProducts.length / eachCounts);
+      pageMaxCount = Math.ceil(tmpProducts.length / this.eachCounts);
       for (let count = 0; count < pageMaxCount; count++) {
         const tmpProductItem: Product[] = [];
-        for (let idx = 0; idx < eachCounts; idx++) {
+        for (let idx = 0; idx < this.eachCounts; idx++) {
           const tmpProductsIndex = 10 * count + idx;
           if (tmpProducts[tmpProductsIndex]) { tmpProductItem.push(tmpProducts[tmpProductsIndex]); }
         }
         this.productsArray.push(tmpProductItem);
-        this.products = this.productsArray[0];
       }
+      this.pageCountArray = Array(this.productsArray.length).fill(0);
+      this.products = this.productsArray[0];
     });
   }
 
@@ -88,14 +92,32 @@ export class AppComponent implements OnInit {
 
   searchProductName() {
     console.log(this.searchString);
-    const searchProductsResult: Product[] = [];
-    this.getProductsFromJson();
-    for (let i = 0; i < this.products.length; i++) {
-      if (this.products[i].name.match(this.searchString) != null) {
-        searchProductsResult.push(this.products[i]);
+    let isSearchNull = false;
+    if (this.searchString.length > 0) {
+      const searchProductsResult: Product[] = [];
+      for (let i = 0; i < this.productsArray.length; i++) {
+        const tmpProductsArray = this.productsArray[i];
+        for (let idx = 0; idx < tmpProductsArray.length; idx++) {
+          if (tmpProductsArray[idx].name.match(this.searchString) != null) {
+            searchProductsResult.push(tmpProductsArray[idx]);
+          }
+        }
       }
+      this.products = searchProductsResult;
+    } else {
+      this.products = this.productsArray[0];
+      isSearchNull = true;
     }
-    this.products = searchProductsResult;
+    this.calcPageCounts(this.products, isSearchNull);
+  }
+
+  calcPageCounts(searchResultArray, isSearchNull) {
+    if (isSearchNull) {
+      this.pageCountArray = Array(this.pageCountArray.length).fill(0);
+    } else {
+      const pageCounts = Math.ceil(searchResultArray.length / this.eachCounts);
+      this.pageCountArray = Array(pageCounts).fill(0);
+    }
   }
   clearSearchResult() {
     this.searchString = '';
