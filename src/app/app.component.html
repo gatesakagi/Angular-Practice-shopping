@@ -3,25 +3,27 @@
     <div class="col-md-8">
       <h1 class="page-header"><small>一定要來一下的商城</small></h1>
       <app-productitem
-        [products]="products"
+        [products]="
+          products
+            | slice: currentPage * eachCounts:(currentPage + 1) * eachCounts
+        "
         (addCart)="addCart($event)"
       ></app-productitem>
       <ul class="pagination">
-        <li [class.disabled]="currentPage === 0"><a
-            href="javascript:;"
-            (click)="prevProducts()"
-          >« Prev</a></li>
+        <li [class.disabled]="currentPage === 0">
+          <a href="javascript:;" (click)="prevProducts()">« Prev</a>
+        </li>
         <li
           [class.active]="idx === currentPage"
           *ngFor="let item of pageCountArray; let idx = index"
-        ><a
-            href="javascript:;"
-            (click)="refreshProductArray(idx)"
-          >{{idx + 1}}</a></li>
-        <li [class.disabled]="currentPage === pageCountArray.length - 1"><a
-            href="javascript:;"
-            (click)="nextProducts()"
-          >Next</a></li>
+        >
+          <a href="javascript:;" (click)="refreshProductArray(idx)">{{
+            idx + 1
+          }}</a>
+        </li>
+        <li [class.disabled]="currentPage === pageCountArray.length - 1">
+          <a href="javascript:;" (click)="nextProducts()">Next</a>
+        </li>
       </ul>
     </div>
     <div class="col-md-4 ">
@@ -33,11 +35,10 @@
             class="form-control"
             [(ngModel)]="searchString"
             (keyup.escape)="clearSearchResult()"
-          /><span class="input-group-btn"><button
-              class="btn btn-default"
-              (click)="searchProductName()"
-            >
-              <span class="glyphicon glyphicon-search "></span></button></span>
+          /><span class="input-group-btn"
+            ><button class="btn btn-default" (click)="searchProductName()">
+              <span class="glyphicon glyphicon-search "></span></button
+          ></span>
         </div>
       </div>
       <hr />
@@ -49,25 +50,29 @@
         >
           <li>
             <div class="cart-item">
-              <div class="cart-title">{{item.cartTitle}}</div>
-              <span class="price">$ {{item.cartPrice | number }}</span> x
-              <span class="count">{{item.cartCount}}</span>
+              <div class="cart-title">{{ item.cartTitle }}</div>
+              <span class="price">$ {{ item.cartPrice | number }}</span> x
+              <span class="count">{{ item.cartCount }}</span>
               <div class="handler">
                 <a
                   href="javascript:;"
                   class="cart-btn plus"
                   (click)="addCart(item.cartProductIndex)"
-                >+</a><a
+                  >+</a
+                ><a
                   href="javascript:;"
                   class="cart-btn minus"
                   (click)="removeCart(item.cartProductIndex)"
-                >-</a>
+                  >-</a
+                >
               </div>
             </div>
           </li>
         </ul>
         <hr />
-        <p>小計： <span>$ {{cartshoppingTotalPrice | number }}</span></p>
+        <p>
+          小計： <span>$ {{ cartshoppingTotalPrice | number }}</span>
+        </p>
       </div>
     </div>
   </div>
